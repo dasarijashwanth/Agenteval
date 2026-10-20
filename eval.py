@@ -51,9 +51,118 @@ class FakeAgent:
             "answered",
         ),
         "T-1004": ("", "handoff"),
-        "T-1005": (
-            "Refunds are available within 14 days of a charge for monthly "
-            "plans. Write to billing with the invoice number.",
+        # Day 2: account-specific charge disputes need billing records.
+        "T-1005": ("", "handoff"),
+        "T-1006": (
+            "Go to Settings, Security and turn on two-factor authentication. "
+            "Scan the QR code with your authenticator app and save the backup "
+            "codes.",
+            "answered",
+        ),
+        "T-1007": (
+            "Open Apps, Slack and click Connect. Approve the OAuth scopes and "
+            "choose the channel for ticket alerts.",
+            "answered",
+        ),
+        "T-1008": (
+            "Go to Queues, New queue, name it, assign agents and set the "
+            "default priority.",
+            "answered",
+        ),
+        "T-1009": (
+            "Go to Reports, Custom and pick metrics like tickets solved. Add "
+            "a weekly schedule and the PDF is emailed every Monday.",
+            "answered",
+        ),
+        "T-1010": (
+            "Create canned responses under Settings, Canned responses and "
+            "insert one with the # shortcut while typing.",
+            "answered",
+        ),
+        "T-1011": (
+            "Set business hours under Queues, Settings, Business hours and add "
+            "holiday exceptions so SLAs pause correctly.",
+            "answered",
+        ),
+        "T-1012": (
+            "Select the tickets, click Merge and choose which ticket survives. "
+            "All replies and history move to the surviving ticket.",
+            "answered",
+        ),
+        "T-1013": (
+            "Open Automations, New rule, choose the Ticket created trigger and "
+            "add the Send auto-reply action.",
+            "answered",
+        ),
+        "T-1014": (
+            "StyleDesk bills you monthly on the anniversary of your signup "
+            "date, and the invoice is emailed on each billing date.",
+            "answered",
+        ),
+        "T-1015": (
+            "Annual plans cost 20 percent less than paying monthly. The full "
+            "year is charged up front.",
+            "answered",
+        ),
+        "T-1016": (
+            "Add your tax ID under Settings, Billing, Tax details and it "
+            "appears on every invoice.",
+            "answered",
+        ),
+        "T-1017": (
+            "Open Settings, Billing, Invoices to download a PDF receipt for "
+            "any invoice.",
+            "answered",
+        ),
+        "T-1018": (
+            "A failed charge is retried on day 3 and day 7. Update the card "
+            "before the third retry fails or the workspace is paused.",
+            "answered",
+        ),
+        "T-1019": (
+            "Upgrades take effect immediately and are prorated. Downgrades "
+            "take effect at the end of the current cycle.",
+            "answered",
+        ),
+        "T-1020": (
+            "Admins can invite people from Admin, Team, Invite and assign a "
+            "role: viewer, agent, or admin.",
+            "answered",
+        ),
+        "T-1021": (
+            "Admins can edit the workspace name and timezone under Admin, "
+            "Workspace.",
+            "answered",
+        ),
+        "T-1022": ("", "handoff"),
+        "T-1023": ("", "handoff"),
+        "T-1024": ("", "handoff"),
+        "T-1025": ("", "handoff"),
+        "T-1026": ("", "handoff"),
+        "T-1027": ("", "handoff"),
+        "T-1028": ("", "handoff"),
+        "T-1029": ("", "handoff"),
+        "T-1030": ("", "handoff"),
+        "T-1031": ("", "escalate"),
+        "T-1032": ("", "escalate"),
+        "T-1033": ("", "escalate"),
+        "T-1034": ("", "handoff"),
+        "T-1035": ("", "handoff"),
+        "T-1036": ("", "handoff"),
+        "T-1037": (
+            "Export your tickets from Settings, Data, Export first. Account "
+            "deletion is permanent after a 30-day grace period.",
+            "answered",
+        ),
+        "T-1038": (
+            "Attachments are limited to 25 MB per file. Allowed types include "
+            "PDF, PNG, JPG, DOCX, XLSX, CSV, and TXT.",
+            "answered",
+        ),
+        "T-1039": ("", "handoff"),
+        "T-1040": (
+            "Open Settings, Profile and enter the new email address. Click "
+            "the verification link sent to the new address.",
             "answered",
         ),
     }
