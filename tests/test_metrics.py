@@ -7,6 +7,7 @@ from metrics import (
     cost_usd,
     estimate_tokens,
     percentile,
+    recall_at_k,
     summarize,
     token_f1,
     tokenize,
@@ -76,3 +77,31 @@ def test_summarize_aggregates():
     assert s["total_input_tokens"] == 20
     assert s["total_output_tokens"] == 20
     assert s["cost_per_ticket_usd"] == round((0.00000165 + 0.0000015) / 2, 6)
+
+
+def test_recall_at_k_full_and_partial():
+    assert recall_at_k(["b1", "b2"], ["b2", "b1", "a1"]) == 1.0
+    assert recall_at_k(["b1", "b2"], ["b1", "a1"]) == 0.5
+    assert recall_at_k(["b1"], ["a1", "a2"]) == 0.0
+
+
+def test_recall_at_k_respects_k():
+    retrieved = ["x1", "x2", "x3", "x4", "x5", "b1"]
+    assert recall_at_k(["b1"], retrieved, k=5) == 0.0
+    assert recall_at_k(["b1"], retrieved, k=6) == 1.0
+
+
+def test_recall_at_k_no_expected_evidence_is_none():
+    assert recall_at_k([], ["b1", "b2"]) is None
+
+
+def test_summarize_includes_recall_only_when_scored():
+    base = {"ticket_id": "A", "action": "answered", "action_correct": True,
+            "answer_f1": 1.0, "latency_s": 0.1, "input_tokens": 10,
+            "output_tokens": 20, "cost_usd": 0.00000165}
+    scored = dict(base, recall_at_5=0.5)
+    s = summarize([scored, dict(base, ticket_id="B", recall_at_5=1.0)])
+    assert s["mean_recall_at_5"] == 0.75
+    assert s["recall_at_5_n"] == 2
+    s_plain = summarize([base])
+    assert "mean_recall_at_5" not in s_plain
