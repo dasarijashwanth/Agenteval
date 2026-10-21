@@ -44,6 +44,21 @@ def action_match(expected_action: str, actual_action: str) -> bool:
     return expected_action.strip().lower() == actual_action.strip().lower()
 
 
+def recall_at_k(expected_ids: list[str], retrieved_ids: list[str], k: int = 5) -> float | None:
+    """Fraction of expected evidence ids found in the top-k retrieved ids.
+
+    Returns None when the ticket carries no expected evidence (nothing to
+    recall), so averages can run over evidence-bearing tickets only. When
+    the agent returns fewer than k results, the metric degrades to recall
+    at the returned depth; the value is still reported as recall@k.
+    """
+    expected = set(expected_ids)
+    if not expected:
+        return None
+    top = set(retrieved_ids[:k])
+    return len(expected & top) / len(expected)
+
+
 def cost_usd(input_tokens: int, output_tokens: int) -> float:
     return input_tokens / 1_000_000 * INPUT_PRICE_PER_1M + output_tokens / 1_000_000 * OUTPUT_PRICE_PER_1M
 
@@ -65,7 +80,7 @@ def summarize(items: list[dict]) -> dict:
     latencies = [i["latency_s"] for i in items]
     costs = [i["cost_usd"] for i in items]
     total_cost = sum(costs)
-    return {
+    summary = {
         "n": n,
         "action_accuracy": round(sum(1 for i in items if i["action_correct"]) / n, 4),
         "mean_answer_f1": round(sum(i["answer_f1"] for i in items) / n, 4),
@@ -77,3 +92,8 @@ def summarize(items: list[dict]) -> dict:
         "total_cost_usd": round(total_cost, 6),
         "cost_per_ticket_usd": round(total_cost / n, 6),
     }
+    recalls = [i["recall_at_5"] for i in items if i.get("recall_at_5") is not None]
+    if recalls:
+        summary["mean_recall_at_5"] = round(statistics.fmean(recalls), 4)
+        summary["recall_at_5_n"] = len(recalls)
+    return summary
