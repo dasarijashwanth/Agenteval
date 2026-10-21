@@ -1,0 +1,96 @@
+{
+  "golden_set": "helpdesk_v3",
+  "n": 100,
+  "note": "Operating-point analysis over a normalized BM25 confidence score; not probability calibration.",
+  "recall_at_5": {
+    "mean_recall_at_5": 1.0,
+    "full_hit_rate": 1.0,
+    "n_evidence_bearing": 81
+  },
+  "sweep": [
+    {
+      "threshold": 0.0,
+      "coverage": 0.54,
+      "action_accuracy": 1.0,
+      "answered_precision": 1.0,
+      "escalate_recall": 1.0
+    },
+    {
+      "threshold": 0.2,
+      "coverage": 0.54,
+      "action_accuracy": 1.0,
+      "answered_precision": 1.0,
+      "escalate_recall": 1.0
+    },
+    {
+      "threshold": 0.35,
+      "coverage": 0.54,
+      "action_accuracy": 1.0,
+      "answered_precision": 1.0,
+      "escalate_recall": 1.0
+    },
+    {
+      "threshold": 0.5,
+      "coverage": 0.54,
+      "action_accuracy": 1.0,
+      "answered_precision": 1.0,
+      "escalate_recall": 1.0
+    },
+    {
+      "threshold": 0.6,
+      "coverage": 0.54,
+      "action_accuracy": 1.0,
+      "answered_precision": 1.0,
+      "escalate_recall": 1.0
+    },
+    {
+      "threshold": 0.7,
+      "coverage": 0.54,
+      "action_accuracy": 1.0,
+      "answered_precision": 1.0,
+      "escalate_recall": 1.0
+    },
+    {
+      "threshold": 0.8,
+      "coverage": 0.54,
+      "action_accuracy": 1.0,
+      "answered_precision": 1.0,
+      "escalate_recall": 1.0
+    },
+    {
+      "threshold": 0.85,
+      "coverage": 0.54,
+      "action_accuracy": 1.0,
+      "answered_precision": 1.0,
+      "escalate_recall": 1.0
+    },
+    {
+      "threshold": 0.9,
+      "coverage": 0.54,
+      "action_accuracy": 1.0,
+      "answered_precision": 1.0,
+      "escalate_recall": 1.0
+    },
+    {
+      "threshold": 0.94,
+      "coverage": 0.54,
+      "action_accuracy": 1.0,
+      "answered_precision": 1.0,
+      "escalate_recall": 1.0
+    },
+    {
+      "threshold": 0.97,
+      "coverage": 0.14,
+      "action_accuracy": 0.6,
+      "answered_precision": 1.0,
+      "escalate_recall": 1.0
+    },
+    {
+      "threshold": 0.99,
+      "coverage": 0.0,
+      "action_accuracy": 0.46,
+      "answered_precision": null,
+      "escalate_recall": 1.0
+    }
+  ]
+}
