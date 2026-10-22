@@ -1,0 +1,15 @@
+{
+  "gate": 0.35,
+  "total_tickets": 100,
+  "auto_accepted": 42,
+  "sent_to_reviewer": 12,
+  "handoffs": 38,
+  "escalations": 8,
+  "audit_minutes": 21.0,
+  "reviewer_minutes": 24.0,
+  "handling_minutes": 384.0,
+  "total_human_minutes": 429.0,
+  "fully_manual_baseline_minutes": 800.0,
+  "minutes_saved": 371.0,
+  "effort_saved_pct": 46.4
+}
