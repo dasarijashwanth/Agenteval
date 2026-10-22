@@ -29,6 +29,12 @@ through the small agent interface in `eval.py`.
   `evals/threshold_sweep_results.md`.
 - `evals/failure_demos.py`: six failure and recovery scenarios with a
   pass/fail report.
+- `evals/run_day4.py`: Day 4 analyses (quality-vs-coverage curve,
+  cost-aware acceptance gate, reviewer-effort measurement) over the
+  harness's scored output, in `evals/quality_coverage.py`,
+  `evals/cost_routing.py`, and `evals/reviewer_effort.py`. Results land
+  in `evals/quality_coverage_results.*`, `evals/cost_routing_results.*`,
+  and `evals/reviewer_effort_results.*`.
 
 ## Day 3 results
 
@@ -47,6 +53,35 @@ through the small agent interface in `eval.py`.
 - FakeAgent baseline over 100 tickets: action accuracy 1.0, mean answer
   F1 0.238, cost per ticket about $0.00001 at mock prices.
 - 18 tests passing.
+
+## Day 4 results
+
+Run with `python evals/run_day4.py`. The analysis gates auto-acceptance
+of an answered result on its measured answer-quality score (token F1);
+offline the score is exact, and a live agent would expose a runtime
+proxy for it.
+
+- Quality-vs-coverage curve: with the gate open, coverage is 0.54 at a
+  mean accepted F1 of 0.4408. Raising the gate trades coverage for
+  accepted quality smoothly: gate 0.35 ships 0.42 coverage at F1 0.4747,
+  gate 0.50 ships 0.12 at F1 0.6023, gate 0.80 ships 0.01 at F1 0.8462.
+  Accepted action accuracy is 1.0000 at every gate on this baseline:
+  the mock agent never misroutes, so the gate trades answer quality,
+  not routing errors.
+- Cost-aware routing: outcomes are priced in dollars (spot audit of an
+  accepted answer $0.30, reviewer decision $1.20, handoff $4.80,
+  escalation $8.00, wrong auto-accept penalty $6.00, plus the measured
+  inference cost). The cheapest gate whose accepted work clears the
+  quality floor (mean accepted F1 at or above 0.45) is 0.35, at an
+  expected $2.7340 per ticket. The gate just below it (0.30) misses the
+  floor at F1 0.4444.
+- Reviewer effort: at gate 0.35 the 100 golden tickets take 429 human
+  minutes (42 auto-accepted audits, 12 reviewer decisions, 38 handoffs,
+  8 escalations) against a fully manual baseline of 800 minutes, a
+  46.4 percent saving. Estimates under the stated minute assumptions,
+  not a time study.
+- 25 tests passing (7 new Day 4 tests cover the curve math, the cost
+  branches, and the effort accounting).
 
 ## Setup
 
@@ -74,5 +109,6 @@ pytest -q
 
 Day 1: harness, metrics, 5-ticket golden set. Day 2: golden set of 40,
 failure demos, regression gate. Day 3: golden set of 100, recall@5,
-threshold operating-point sweep. Day 4: quality-vs-coverage analysis and
-reviewer-effort measurement. Day 5: full README + demo story.
+threshold operating-point sweep. Day 4: quality-vs-coverage curve,
+cost-aware acceptance gate, reviewer-effort measurement (done).
+Day 5: full README + demo story.
