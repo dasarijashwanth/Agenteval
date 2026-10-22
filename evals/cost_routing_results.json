@@ -1,0 +1,110 @@
+{
+  "quality_floor_mean_f1": 0.45,
+  "rows": [
+    {
+      "gate": 0.0,
+      "total_cost_usd": 262.601,
+      "expected_cost_per_ticket_usd": 2.626,
+      "coverage": 0.54,
+      "mean_accepted_f1": 0.4408,
+      "accepted_action_accuracy": 1.0
+    },
+    {
+      "gate": 0.2,
+      "total_cost_usd": 262.601,
+      "expected_cost_per_ticket_usd": 2.626,
+      "coverage": 0.54,
+      "mean_accepted_f1": 0.4408,
+      "accepted_action_accuracy": 1.0
+    },
+    {
+      "gate": 0.25,
+      "total_cost_usd": 262.601,
+      "expected_cost_per_ticket_usd": 2.626,
+      "coverage": 0.54,
+      "mean_accepted_f1": 0.4408,
+      "accepted_action_accuracy": 1.0
+    },
+    {
+      "gate": 0.3,
+      "total_cost_usd": 263.501,
+      "expected_cost_per_ticket_usd": 2.635,
+      "coverage": 0.53,
+      "mean_accepted_f1": 0.4444,
+      "accepted_action_accuracy": 1.0
+    },
+    {
+      "gate": 0.35,
+      "total_cost_usd": 273.401,
+      "expected_cost_per_ticket_usd": 2.734,
+      "coverage": 0.42,
+      "mean_accepted_f1": 0.4747,
+      "accepted_action_accuracy": 1.0
+    },
+    {
+      "gate": 0.4,
+      "total_cost_usd": 281.501,
+      "expected_cost_per_ticket_usd": 2.815,
+      "coverage": 0.33,
+      "mean_accepted_f1": 0.5018,
+      "accepted_action_accuracy": 1.0
+    },
+    {
+      "gate": 0.45,
+      "total_cost_usd": 293.201,
+      "expected_cost_per_ticket_usd": 2.932,
+      "coverage": 0.2,
+      "mean_accepted_f1": 0.5506,
+      "accepted_action_accuracy": 1.0
+    },
+    {
+      "gate": 0.5,
+      "total_cost_usd": 300.401,
+      "expected_cost_per_ticket_usd": 3.004,
+      "coverage": 0.12,
+      "mean_accepted_f1": 0.6023,
+      "accepted_action_accuracy": 1.0
+    },
+    {
+      "gate": 0.55,
+      "total_cost_usd": 304.001,
+      "expected_cost_per_ticket_usd": 3.04,
+      "coverage": 0.08,
+      "mean_accepted_f1": 0.6534,
+      "accepted_action_accuracy": 1.0
+    },
+    {
+      "gate": 0.6,
+      "total_cost_usd": 306.701,
+      "expected_cost_per_ticket_usd": 3.067,
+      "coverage": 0.05,
+      "mean_accepted_f1": 0.7088,
+      "accepted_action_accuracy": 1.0
+    },
+    {
+      "gate": 0.7,
+      "total_cost_usd": 308.501,
+      "expected_cost_per_ticket_usd": 3.085,
+      "coverage": 0.03,
+      "mean_accepted_f1": 0.7701,
+      "accepted_action_accuracy": 1.0
+    },
+    {
+      "gate": 0.8,
+      "total_cost_usd": 310.301,
+      "expected_cost_per_ticket_usd": 3.103,
+      "coverage": 0.01,
+      "mean_accepted_f1": 0.8462,
+      "accepted_action_accuracy": 1.0
+    }
+  ],
+  "chosen_gate": {
+    "gate": 0.35,
+    "total_cost_usd": 273.401,
+    "expected_cost_per_ticket_usd": 2.734,
+    "coverage": 0.42,
+    "mean_accepted_f1": 0.4747,
+    "accepted_action_accuracy": 1.0,
+    "quality_floor_met": true
+  }
+}

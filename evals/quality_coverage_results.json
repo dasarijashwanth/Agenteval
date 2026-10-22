@@ -1,0 +1,101 @@
+{
+  "n": 100,
+  "points": [
+    {
+      "gate": 0.0,
+      "auto_accepted": 54,
+      "coverage": 0.54,
+      "sent_to_reviewer": 0,
+      "mean_accepted_f1": 0.4408,
+      "accepted_action_accuracy": 1.0
+    },
+    {
+      "gate": 0.2,
+      "auto_accepted": 54,
+      "coverage": 0.54,
+      "sent_to_reviewer": 0,
+      "mean_accepted_f1": 0.4408,
+      "accepted_action_accuracy": 1.0
+    },
+    {
+      "gate": 0.25,
+      "auto_accepted": 54,
+      "coverage": 0.54,
+      "sent_to_reviewer": 0,
+      "mean_accepted_f1": 0.4408,
+      "accepted_action_accuracy": 1.0
+    },
+    {
+      "gate": 0.3,
+      "auto_accepted": 53,
+      "coverage": 0.53,
+      "sent_to_reviewer": 1,
+      "mean_accepted_f1": 0.4444,
+      "accepted_action_accuracy": 1.0
+    },
+    {
+      "gate": 0.35,
+      "auto_accepted": 42,
+      "coverage": 0.42,
+      "sent_to_reviewer": 12,
+      "mean_accepted_f1": 0.4747,
+      "accepted_action_accuracy": 1.0
+    },
+    {
+      "gate": 0.4,
+      "auto_accepted": 33,
+      "coverage": 0.33,
+      "sent_to_reviewer": 21,
+      "mean_accepted_f1": 0.5018,
+      "accepted_action_accuracy": 1.0
+    },
+    {
+      "gate": 0.45,
+      "auto_accepted": 20,
+      "coverage": 0.2,
+      "sent_to_reviewer": 34,
+      "mean_accepted_f1": 0.5506,
+      "accepted_action_accuracy": 1.0
+    },
+    {
+      "gate": 0.5,
+      "auto_accepted": 12,
+      "coverage": 0.12,
+      "sent_to_reviewer": 42,
+      "mean_accepted_f1": 0.6023,
+      "accepted_action_accuracy": 1.0
+    },
+    {
+      "gate": 0.55,
+      "auto_accepted": 8,
+      "coverage": 0.08,
+      "sent_to_reviewer": 46,
+      "mean_accepted_f1": 0.6534,
+      "accepted_action_accuracy": 1.0
+    },
+    {
+      "gate": 0.6,
+      "auto_accepted": 5,
+      "coverage": 0.05,
+      "sent_to_reviewer": 49,
+      "mean_accepted_f1": 0.7088,
+      "accepted_action_accuracy": 1.0
+    },
+    {
+      "gate": 0.7,
+      "auto_accepted": 3,
+      "coverage": 0.03,
+      "sent_to_reviewer": 51,
+      "mean_accepted_f1": 0.7701,
+      "accepted_action_accuracy": 1.0
+    },
+    {
+      "gate": 0.8,
+      "auto_accepted": 1,
+      "coverage": 0.01,
+      "sent_to_reviewer": 53,
+      "mean_accepted_f1": 0.8462,
+      "accepted_action_accuracy": 1.0
+    }
+  ]
+}
