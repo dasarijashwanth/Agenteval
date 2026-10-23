@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgentEval: Live Demo</title>
+<style>
+  :root{
+    --ink:#1f2937; --muted:#6b7280; --line:#e5e7eb; --bg:#f8fafc;
+    --accent:#1d4ed8; --accent-soft:#dbeafe;
+    --ship:#15803d; --ship-bg:#dcfce7;
+    --review:#b45309; --review-bg:#fef3c7;
+    --reject:#b91c1c; --reject-bg:#fee2e2;
+    --card:#ffffff;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;}
+  .wrap{max-width:960px;margin:0 auto;padding:32px 20px 48px;}
+  header{border-bottom:3px solid var(--ink);padding-bottom:20px;margin-bottom:28px;}
+  h1{font-size:36px;margin:0 0 6px;letter-spacing:-0.5px;}
+  .tagline{font-size:17px;color:var(--muted);margin:0 0 20px;}
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;}
+  .metric{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;}
+  .metric .num{font-size:26px;font-weight:700;color:var(--accent);}
+  .metric .lbl{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;}
+  section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:24px;margin-bottom:24px;}
+  h2{font-size:21px;margin:0 0 6px;}
+  .sub{color:var(--muted);font-size:14px;margin:0 0 18px;}
+  .gate-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:8px;}
+  .gate-row label{font-weight:600;}
+  input[type=range]{flex:1;min-width:220px;accent-color:var(--accent);}
+  .gate-val{font-size:22px;font-weight:700;color:var(--accent);min-width:64px;text-align:right;}
+  .gate-ticks{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:20px;}
+  .readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px;}
+  .readout .cell{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:12px 14px;}
+  .readout .v{font-size:22px;font-weight:700;}
+  .readout .k{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;}
+  .verdict{border-radius:10px;padding:16px 18px;font-size:16px;}
+  .verdict .badge{display:inline-block;font-weight:800;font-size:18px;padding:2px 12px;border-radius:999px;margin-right:10px;vertical-align:middle;}
+  .verdict.ship{background:var(--ship-bg);} .verdict.ship .badge{background:var(--ship);color:#fff;}
+  .verdict.review{background:var(--review-bg);} .verdict.review .badge{background:var(--review);color:#fff;}
+  .verdict.reject{background:var(--reject-bg);} .verdict.reject .badge{background:var(--reject);color:#fff;}
+  .shipped-note{margin-top:12px;font-size:14px;color:var(--muted);}
+  .shipped-note strong{color:var(--ship);}
+  svg{width:100%;height:auto;display:block;}
+  .chart-title{font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin:14px 0 4px;}
+  table{width:100%;border-collapse:collapse;font-size:14px;}
+  th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:right;}
+  th:first-child,td:first-child{text-align:left;}
+  th{color:var(--muted);font-weight:600;text-transform:uppercase;font-size:12px;letter-spacing:0.5px;}
+  tr.chosen{background:var(--accent-soft);}
+  tr.chosen td{font-weight:700;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  @media (max-width:640px){.grid2{grid-template-columns:1fr;}}
+  .score-list{margin:0;padding-left:18px;}
+  .score-list li{margin-bottom:8px;}
+  .bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:14px;}
+  .bar-row .name{width:110px;flex:none;}
+  .bar-track{flex:1;background:var(--line);border-radius:6px;height:16px;overflow:hidden;}
+  .bar-fill{height:100%;background:var(--accent);}
+  .bar-row .n{width:36px;text-align:right;font-weight:600;}
+  footer{color:var(--muted);font-size:14px;text-align:center;padding-top:8px;}
+  a{color:var(--accent);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>AgentEval</h1>
+  <p class="tagline">An eval and cost harness that grades an AI agent against a human-reviewed golden set and turns the scores into a ship, review, or reject decision.</p>
+  <div class="metrics">
+    <div class="metric"><div class="num">0.35</div><div class="lbl">Shipped gate (token F1)</div></div>
+    <div class="metric"><div class="num">$2.7340</div><div class="lbl">Cost per ticket at gate</div></div>
+    <div class="metric"><div class="num">1.0000</div><div class="lbl">Recall@5, 81 evidence cases</div></div>
+    <div class="metric"><div class="num">46.4%</div><div class="lbl">Reviewer effort saved</div></div>
+  </div>
+</header>
+
+<section>
+  <h2>Try the acceptance gate</h2>
+  <p class="sub">The gate auto-accepts an agent answer only when its measured answer quality (token F1 against expected keywords) clears the threshold. Drag the slider across the real sweep values from the 100-case golden set and watch quality, coverage, cost, and reviewer effort move. The quality floor is a mean accepted F1 of 0.45.</p>
+
+  <div class="gate-row">
+    <label for="gateSlider">Gate threshold</label>
+    <input type="range" id="gateSlider" min="0" max="11" step="1" value="4">
+    <div class="gate-val" id="gateVal">0.35</div>
+  </div>
+  <div class="gate-ticks"><span>0.00</span><span>0.20</span><span>0.25</span><span>0.30</span><span>0.35</span><span>0.40</span><span>0.45</span><span>0.50</span><span>0.55</span><span>0.60</span><span>0.70</span><span>0.80</span></div>
+
+  <div class="readout">
+    <div class="cell"><div class="v" id="rF1">0.4747</div><div class="k">Mean accepted F1</div></div>
+    <div class="cell"><div class="v" id="rCost">$2.7340</div><div class="k">Cost per ticket</div></div>
+    <div class="cell"><div class="v" id="rMin">429</div><div class="k">Reviewer minutes / 100</div></div>
+    <div class="cell"><div class="v" id="rCov">42%</div><div class="k">Coverage (auto-accepted)</div></div>
+  </div>
+
+  <div class="verdict ship" id="verdictBox">
+    <span class="badge" id="verdictBadge">SHIP</span><span id="verdictText"></span>
+  </div>
+  <p class="shipped-note">Shipped decision: <strong>gate 0.35</strong>, the cheapest gate whose accepted work clears the 0.45 mean F1 floor, at $2.7340 per ticket.</p>
+
+  <p class="chart-title">Mean accepted F1 by gate (dashed line: 0.45 quality floor)</p>
+  <svg id="chartF1" viewBox="0 0 880 240" role="img" aria-label="Mean accepted F1 by gate"></svg>
+  <p class="chart-title">Expected cost per ticket by gate (USD)</p>
+  <svg id="chartCost" viewBox="0 0 880 240" role="img" aria-label="Cost per ticket by gate"></svg>
+</section>
+
+<section>
+  <h2>Golden set scorecard</h2>
+  <p class="sub">Golden set v3: 100 human-reviewed cases, each with an expected action, expected evidence, and notes.</p>
+  <div class="grid2">
+    <div>
+      <div class="bar-row"><span class="name">Answered</span><div class="bar-track"><div class="bar-fill" style="width:54%"></div></div><span class="n">54</span></div>
+      <div class="bar-row"><span class="name">Handoff</span><div class="bar-track"><div class="bar-fill" style="width:38%"></div></div><span class="n">38</span></div>
+      <div class="bar-row"><span class="name">Escalate</span><div class="bar-track"><div class="bar-fill" style="width:8%"></div></div><span class="n">8</span></div>
+      <div class="bar-row"><span class="name">Hard cases</span><div class="bar-track"><div class="bar-fill" style="width:13%;background:#b45309"></div></div><span class="n">13</span></div>
+    </div>
+    <ul class="score-list">
+      <li><strong>Recall@5:</strong> mean 1.0000 over the 81 evidence-bearing cases, full-hit rate 1.0000.</li>
+      <li><strong>Routing verification:</strong> 100 of 100 cases match their labels.</li>
+      <li><strong>Accepted action accuracy:</strong> 1.0000 at every gate in the sweep.</li>
+      <li><strong>Hard cases:</strong> 13 cases covering missing documentation, contradictory policy, unanswerable inputs, and prompt injections.</li>
+      <li><strong>Reviewer effort at gate 0.35:</strong> 429 human minutes per 100 tickets against a fully manual baseline of 800 minutes, saving 371 minutes (46.4%).</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2>The full sweep</h2>
+  <p class="sub">Every row is a real result from the project eval files. The highlighted row is the shipped gate.</p>
+  <table>
+    <thead>
+      <tr><th>Gate</th><th>Mean F1</th><th>Coverage</th><th>Auto-accepted</th><th>To reviewer</th><th>$/ticket</th><th>Reviewer min</th><th>Verdict</th></tr>
+    </thead>
+    <tbody id="sweepBody"></tbody>
+  </table>
+  <p class="sub" style="margin-top:14px;">Reviewer minutes use the project effort model: 0.5 min spot audit per auto-accepted answer, 2 min per reviewer decision, 8 min per handoff, 10 min per escalation. Cost model: audit $0.30, reviewer decision $1.20, handoff $4.80, escalation $8.00, plus measured inference cost.</p>
+</section>
+
+<footer>
+  <p>AgentEval source and full eval reports: <a href="https://github.com/dasarijashwanth/Agenteval">github.com/dasarijashwanth/Agenteval</a></p>
+</footer>
+
+</div>
+
+<script>
+var FLOOR = 0.45;
+var SHIPPED = 0.35;
+// Real sweep data: evals/quality_coverage_results.json + evals/cost_routing_results.json.
+// Reviewer minutes computed with the evals/reviewer_effort.py model and verified against
+// evals/reviewer_effort_results.json (429 minutes at gate 0.35).
+var SWEEP = [
+  {gate:0.00, f1:0.4408, cost:2.626, cov:0.54, auto:54, review:0,  mins:411},
+  {gate:0.20, f1:0.4408, cost:2.626, cov:0.54, auto:54, review:0,  mins:411},
+  {gate:0.25, f1:0.4408, cost:2.626, cov:0.54, auto:54, review:0,  mins:411},
+  {gate:0.30, f1:0.4444, cost:2.635, cov:0.53, auto:53, review:1,  mins:412.5},
+  {gate:0.35, f1:0.4747, cost:2.734, cov:0.42, auto:42, review:12, mins:429},
+  {gate:0.40, f1:0.5018, cost:2.815, cov:0.33, auto:33, review:21, mins:442.5},
+  {gate:0.45, f1:0.5506, cost:2.932, cov:0.20, auto:20, review:34, mins:462},
+  {gate:0.50, f1:0.6023, cost:3.004, cov:0.12, auto:12, review:42, mins:474},
+  {gate:0.55, f1:0.6534, cost:3.040, cov:0.08, auto:8,  review:46, mins:480},
+  {gate:0.60, f1:0.7088, cost:3.067, cov:0.05, auto:5,  review:49, mins:484.5},
+  {gate:0.70, f1:0.7701, cost:3.085, cov:0.03, auto:3,  review:51, mins:487.5},
+  {gate:0.80, f1:0.8462, cost:3.103, cov:0.01, auto:1,  review:53, mins:490.5}
+];
+
+function verdictFor(d){
+  if (d.gate === SHIPPED) return {key:"ship", label:"SHIP",
+    text:"This is the shipped gate. It clears the 0.45 quality floor at the lowest cost of any gate that does, $2.7340 per ticket."};
+  if (d.f1 < FLOOR) return {key:"reject", label:"REJECT",
+    text:"Mean accepted F1 of " + d.f1.toFixed(4) + " sits below the 0.45 quality floor. Cheaper per ticket, but the accepted work is not good enough to ship unreviewed."};
+  return {key:"review", label:"REVIEW",
+    text:"Clears the quality floor, but at $" + d.cost.toFixed(4) + " per ticket it costs more than gate 0.35 for quality the floor does not require, and it sends " + d.review + " of 54 answers to a human. A reviewer should sign off before choosing it."};
+}
+
+function fmtMin(m){ return (m % 1 === 0) ? String(m) : m.toFixed(1); }
+
+function drawChart(svgId, key, yMin, yMax, floorY, fmt, color){
+  var svg = document.getElementById(svgId);
+  var W = 880, H = 240, padL = 56, padR = 16, padT = 14, padB = 34;
+  var iw = W - padL - padR, ih = H - padT - padB;
+  var n = SWEEP.length;
+  function X(i){ return padL + iw * (i / (n - 1)); }
+  function Y(v){ return padT + ih * (1 - (v - yMin) / (yMax - yMin)); }
+  var s = "";
+  for (var g = 0; g <= 4; g++){
+    var v = yMin + (yMax - yMin) * g / 4, y = Y(v);
+    s += '<line x1="'+padL+'" y1="'+y+'" x2="'+(W-padR)+'" y2="'+y+'" stroke="#e5e7eb" stroke-width="1"/>';
+    s += '<text x="'+(padL-8)+'" y="'+(y+4)+'" font-size="11" fill="#6b7280" text-anchor="end">'+fmt(v)+'</text>';
+  }
+  if (floorY !== null){
+    var fy = Y(floorY);
+    s += '<line x1="'+padL+'" y1="'+fy+'" x2="'+(W-padR)+'" y2="'+fy+'" stroke="#b91c1c" stroke-width="1.5" stroke-dasharray="6 4"/>';
+    s += '<text x="'+(W-padR)+'" y="'+(fy-6)+'" font-size="11" fill="#b91c1c" text-anchor="end">floor 0.45</text>';
+  }
+  var pts = SWEEP.map(function(d,i){ return X(i).toFixed(1)+","+Y(d[key]).toFixed(1); }).join(" ");
+  s += '<polyline points="'+pts+'" fill="none" stroke="'+color+'" stroke-width="2.5"/>';
+  SWEEP.forEach(function(d,i){
+    var r = (d.gate === SHIPPED) ? 5 : 3.5;
+    var fill = (d.gate === SHIPPED) ? "#15803d" : color;
+    s += '<circle cx="'+X(i)+'" cy="'+Y(d[key])+'" r="'+r+'" fill="'+fill+'"/>';
+  });
+  var idx = parseInt(document.getElementById("gateSlider").value, 10);
+  var d = SWEEP[idx];
+  s += '<circle cx="'+X(idx)+'" cy="'+Y(d[key])+'" r="10" fill="none" stroke="#1f2937" stroke-width="2"/>';
+  s += '<text x="'+X(idx)+'" y="'+(Y(d[key])-16)+'" font-size="12" font-weight="700" fill="#1f2937" text-anchor="middle">'+fmt(d[key])+'</text>';
+  SWEEP.forEach(function(d,i){
+    s += '<text x="'+X(i)+'" y="'+(H-12)+'" font-size="11" fill="#6b7280" text-anchor="middle">'+d.gate.toFixed(2)+'</text>';
+  });
+  svg.innerHTML = s;
+}
+
+function update(){
+  var idx = parseInt(document.getElementById("gateSlider").value, 10);
+  var d = SWEEP[idx];
+  var v = verdictFor(d);
+  document.getElementById("gateVal").textContent = d.gate.toFixed(2);
+  document.getElementById("rF1").textContent = d.f1.toFixed(4);
+  document.getElementById("rCost").textContent = "$" + d.cost.toFixed(4);
+  document.getElementById("rMin").textContent = fmtMin(d.mins);
+  document.getElementById("rCov").textContent = Math.round(d.cov * 100) + "%";
+  var box = document.getElementById("verdictBox");
+  box.className = "verdict " + v.key;
+  document.getElementById("verdictBadge").textContent = v.label;
+  document.getElementById("verdictText").textContent = v.text;
+  drawChart("chartF1", "f1", 0, 1, FLOOR, function(v){ return v.toFixed(2); }, "#1d4ed8");
+  drawChart("chartCost", "cost", 2.4, 3.2, null, function(v){ return "$" + v.toFixed(2); }, "#b45309");
+}
+
+(function(){
+  var body = document.getElementById("sweepBody");
+  var html = "";
+  SWEEP.forEach(function(d, i){
+    var v = verdictFor(d);
+    html += '<tr' + (d.gate === SHIPPED ? ' class="chosen"' : '') + ' data-i="' + i + '">' +
+      '<td>' + d.gate.toFixed(2) + (d.gate === SHIPPED ? ' (shipped)' : '') + '</td>' +
+      '<td>' + d.f1.toFixed(4) + '</td>' +
+      '<td>' + d.cov.toFixed(2) + '</td>' +
+      '<td>' + d.auto + '</td>' +
+      '<td>' + d.review + '</td>' +
+      '<td>$' + d.cost.toFixed(4) + '</td>' +
+      '<td>' + fmtMin(d.mins) + '</td>' +
+      '<td>' + v.label + '</td></tr>';
+  });
+  body.innerHTML = html;
+  Array.prototype.forEach.call(body.querySelectorAll("tr"), function(tr){
+    tr.style.cursor = "pointer";
+    tr.addEventListener("click", function(){
+      document.getElementById("gateSlider").value = tr.getAttribute("data-i");
+      update();
+    });
+  });
+})();
+
+document.getElementById("gateSlider").addEventListener("input", update);
+update();
+</script>
+</body>
+</html>
